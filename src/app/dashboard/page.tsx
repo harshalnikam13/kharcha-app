@@ -8,7 +8,7 @@ interface Transaction {
   id: string
   type: TxType
   amount: number
-  desc: string
+  description: string
   date: string
   category: string
 }
@@ -48,7 +48,7 @@ export default function Dashboard() {
   // Add form
   const [addType, setAddType] = useState<TxType>('expense')
   const [amount, setAmount] = useState('')
-  const [desc, setDesc] = useState('')
+  const [description, setDescription] = useState('')
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10))
   const [category, setCategory] = useState(CATEGORIES.expense[0])
   const [addLoading, setAddLoading] = useState(false)
@@ -149,15 +149,15 @@ export default function Dashboard() {
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault()
-    if (!amount || !desc) return
+    if (!amount || !description) return
     setAddLoading(true)
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return
     await supabase.from('transactions').insert({
       user_id: session.user.id,
-      type: addType, amount: parseFloat(amount), desc, date, category
+      type: addType, amount: parseFloat(amount), description, date, category
     })
-    setAmount(''); setDesc('')
+    setAmount(''); setDescription('')
     await loadTransactions(session.user.id)
     showToast('✓ Transaction added')
     setAddLoading(false)
@@ -250,7 +250,7 @@ export default function Dashboard() {
                 <div className="tx-item" key={t.id}>
                   <div className="tx-icon" style={{ background: t.type === 'income' ? '#E1F5EE' : '#FAECE7' }}>{t.category.split(' ')[0]}</div>
                   <div className="tx-info">
-                    <div className="tx-name">{t.desc}</div>
+                    <div className="tx-name">{t.description}</div>
                     <div className="tx-meta">{t.category.split(' ').slice(1).join(' ')} · {new Date(t.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
                   </div>
                   <span className={`tx-amount ${t.type === 'income' ? 'cr' : 'dr'}`}>{t.type === 'income' ? '+' : '-'}{fmt(t.amount)}</span>
@@ -284,7 +284,7 @@ export default function Dashboard() {
               </div>
               <div className="form-group-inner" style={{ marginBottom: 12 }}>
                 <label className="form-label">Description</label>
-                <input className="add-input" type="text" placeholder="Salary, Rent, Groceries…" value={desc} onChange={e => setDesc(e.target.value)} required />
+                <input className="add-input" type="text" placeholder="Salary, Rent, Groceries…" value={description} onChange={e => setDescription(e.target.value)} required />
               </div>
               <div className="form-group-inner" style={{ marginBottom: 4 }}>
                 <label className="form-label">Category</label>
@@ -317,7 +317,7 @@ export default function Dashboard() {
                 <div className="parsed-grid">
                   <div className="parsed-field"><div className="key">Type</div><div className="val" style={{ color: smsResult.type === 'income' ? '#0F6E56' : '#993C1D' }}>{smsResult.type === 'income' ? '↓ Income' : '↑ Expense'}</div></div>
                   <div className="parsed-field"><div className="key">Amount</div><div className="val">{fmt(smsResult.amount)}</div></div>
-                  <div className="parsed-field"><div className="key">Description</div><div className="val">{smsResult.desc}</div></div>
+                  <div className="parsed-field"><div className="key">Description</div><div className="val">{smsResult.description}</div></div>
                   <div className="parsed-field"><div className="key">Date</div><div className="val">{smsResult.date}</div></div>
                   <div className="parsed-field"><div className="key">Category</div><div className="val">{smsResult.category}</div></div>
                 </div>

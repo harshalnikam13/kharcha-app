@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 Keys required:
 - type: "income" or "expense"
 - amount: number (no commas, no currency symbol)
-- desc: short merchant or sender name (max 40 chars)
+- description: short merchant or sender name (max 40 chars)
 - date: YYYY-MM-DD format (use ${today} if not found)
 - category: exactly one of: 💼 Salary, 🏪 Business, 📈 Investment, 🎁 Other income, 🛒 Groceries, 🏠 Rent, ⚡ Utilities, 🚗 Transport, 🍽 Food, 🏥 Health, 📱 Subscriptions, 🎉 Entertainment, 📦 Shopping, 💸 Transfer, ❓ Other
 - confidence: "high" or "low"
